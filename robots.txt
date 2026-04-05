@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://profesorsonko.com/sitemap.xml
