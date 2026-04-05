@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Canela:wght@300;400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Fallback si Canela no carga: usar una serif moderna de Google */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 30 15% 97%;
+    --foreground: 20 10% 12%;
+    --card: 30 20% 98%;
+    --card-foreground: 20 10% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 10% 12%;
+    --primary: 8 42% 47%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 30 20% 94%;
+    --secondary-foreground: 20 10% 12%;
+    --muted: 30 15% 92%;
+    --muted-foreground: 20 8% 45%;
+    --accent: 30 25% 88%;
+    --accent-foreground: 20 10% 12%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 15% 88%;
+    --input: 30 15% 88%;
+    --ring: 8 42% 47%;
+    --radius: 0.5rem;
+
+    /* Tipografia: serif moderna sin cursiva + Inter */
+    --font-heading: 'Playfair Display', 'Georgia', serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Titulares: serif moderna, peso 400/500, sin cursiva */
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+}
