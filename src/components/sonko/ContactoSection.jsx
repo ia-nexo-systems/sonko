@@ -19,7 +19,7 @@ function validarTelefono(tel) {
 }
 
 export default function ContactoSection() {
-  const [form, setForm] = useState({ nombre: "", whatsapp: "", mensaje: "" });
+  const [form, setForm] = useState({ nombre: "", whatsapp: "", tipo_consulta: "", contacto_preferido: "", franja_horaria: "", mensaje: "" });
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
@@ -48,12 +48,14 @@ export default function ContactoSection() {
           full_name: form.nombre.trim(),
           phone_raw: form.whatsapp.trim(),
           message: form.mensaje.trim(),
+          tipo_consulta: form.tipo_consulta,
+          contact_channel_preferred: form.contacto_preferido,
+          franja_horaria: form.franja_horaria,
           source_system: "landing_profesorsonko",
           source_endpoint: "landing_form",
           form_id: "form_main",
           landing_url: window.location.href,
           referrer_url: document.referrer || "",
-          contact_channel_preferred: "whatsapp",
           lead_status: "nuevo",
           created_at: new Date().toISOString(),
           ...getUtmParams(),
@@ -133,9 +135,12 @@ export default function ContactoSection() {
               {enviado ? (
                 <div className="text-center py-8">
                   <div className="text-3xl mb-3" style={{ color: '#25D366' }}>✓</div>
-                  <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Mensaje recibido</h3>
-                  <p className="font-inter text-sm" style={{ color: 'rgba(36,31,27,0.6)' }}>
-                    Profesor SONKO se pondrá en contacto contigo en breve.
+                  <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Consulta recibida</h3>
+                  <p className="font-inter text-sm mb-3" style={{ color: 'rgba(36,31,27,0.6)' }}>
+                    Profesor SONKO te contactará {form.contacto_preferido === 'llamada' ? 'por teléfono' : form.contacto_preferido === 'whatsapp' ? 'por WhatsApp' : ''} {form.franja_horaria === 'manana' ? 'por la mañana (9h–13h)' : form.franja_horaria === 'tarde' ? 'por la tarde (13h–18h)' : form.franja_horaria === 'noche' ? 'por la noche (18h–21h)' : 'en breve'}.
+                  </p>
+                  <p className="font-inter text-xs" style={{ color: 'rgba(36,31,27,0.45)' }}>
+                    Toda la información es confidencial.
                   </p>
                 </div>
               ) : (
@@ -185,6 +190,80 @@ export default function ContactoSection() {
                       </p>
                     )}
                   </div>
+                  <div>
+                    <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
+                      Tipo de consulta *
+                    </label>
+                    <select
+                      name="tipo_consulta"
+                      required
+                      value={form.tipo_consulta}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 font-inter text-sm focus:outline-none transition-colors"
+                      style={{
+                        background: '#F3EEE6',
+                        border: '1px solid rgba(140,123,106,0.3)',
+                        borderRadius: '4px',
+                        color: form.tipo_consulta ? '#241F1B' : '#8C7B6A',
+                      }}
+                    >
+                      <option value="" disabled>Selecciona...</option>
+                      <option value="amor">Problemas de amor / pareja</option>
+                      <option value="negocio">Negocios / trabajo</option>
+                      <option value="bloqueo">Bloqueos personales</option>
+                      <option value="familia">Problemas familiares</option>
+                      <option value="proteccion">Protección espiritual</option>
+                      <option value="otro">Otra consulta</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
+                      ¿Cómo prefieres que te contactemos? *
+                    </label>
+                    <select
+                      name="contacto_preferido"
+                      required
+                      value={form.contacto_preferido}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 font-inter text-sm focus:outline-none transition-colors"
+                      style={{
+                        background: '#F3EEE6',
+                        border: '1px solid rgba(140,123,106,0.3)',
+                        borderRadius: '4px',
+                        color: form.contacto_preferido ? '#241F1B' : '#8C7B6A',
+                      }}
+                    >
+                      <option value="" disabled>Selecciona...</option>
+                      <option value="whatsapp">WhatsApp</option>
+                      <option value="llamada">Llamada telefónica</option>
+                      <option value="yo_contacto">Prefiero contactar yo</option>
+                    </select>
+                  </div>
+                  {form.contacto_preferido && form.contacto_preferido !== 'yo_contacto' && (
+                    <div>
+                      <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
+                        Franja horaria preferida *
+                      </label>
+                      <select
+                        name="franja_horaria"
+                        required
+                        value={form.franja_horaria}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 font-inter text-sm focus:outline-none transition-colors"
+                        style={{
+                          background: '#F3EEE6',
+                          border: '1px solid rgba(140,123,106,0.3)',
+                          borderRadius: '4px',
+                          color: form.franja_horaria ? '#241F1B' : '#8C7B6A',
+                        }}
+                      >
+                        <option value="" disabled>Selecciona...</option>
+                        <option value="manana">Mañana (9h – 13h)</option>
+                        <option value="tarde">Tarde (13h – 18h)</option>
+                        <option value="noche">Noche (18h – 21h)</option>
+                      </select>
+                    </div>
+                  )}
                   <div>
                     <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
                       Mensaje (opcional)
