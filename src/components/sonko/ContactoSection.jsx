@@ -1,6 +1,17 @@
 import { useState } from "react";
 
-const WEBHOOK_URL = "https://n8n.ianexo.cloud/webhook/sonko-lead";
+const WEBHOOK_URL = "https://n8n.ianexosystems.com/webhook/sonko-lead";
+
+function getUtmParams() {
+  const params = new URLSearchParams(window.location.search);
+  const utms = {};
+  const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  keys.forEach((key) => {
+    const val = params.get(key);
+    if (val) utms[key] = val;
+  });
+  return utms;
+}
 
 function validarTelefono(tel) {
   const limpio = tel.replace(/[\s\-().]/g, "");
@@ -34,11 +45,18 @@ export default function ContactoSection() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nombre: form.nombre.trim(),
-          whatsapp: form.whatsapp.trim(),
-          mensaje: form.mensaje.trim(),
-          origen: "landing_profesorsonko",
-          fecha: new Date().toISOString(),
+          full_name: form.nombre.trim(),
+          phone_raw: form.whatsapp.trim(),
+          message: form.mensaje.trim(),
+          source_system: "landing_profesorsonko",
+          source_endpoint: "landing_form",
+          form_id: "form_main",
+          landing_url: window.location.href,
+          referrer_url: document.referrer || "",
+          contact_channel_preferred: "whatsapp",
+          lead_status: "nuevo",
+          created_at: new Date().toISOString(),
+          ...getUtmParams(),
         }),
       });
 
