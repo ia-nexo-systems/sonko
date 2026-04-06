@@ -10,6 +10,7 @@ export default function FooterSection() {
           <a href="#hero" className="font-inter text-xs transition-colors" style={{ color: 'rgba(140,123,106,0.45)' }}>Inicio</a>
           <a href="#servicios" className="font-inter text-xs transition-colors" style={{ color: 'rgba(140,123,106,0.45)' }}>Servicios</a>
           <a href="#contacto" className="font-inter text-xs transition-colors" style={{ color: 'rgba(140,123,106,0.45)' }}>Contacto</a>
+          <a href="/privacidad" className="font-inter text-xs transition-colors" style={{ color: 'rgba(140,123,106,0.45)' }}>Privacidad</a>
         </div>
         <p className="font-inter text-xs" style={{ color: 'rgba(140,123,106,0.3)' }}>
           © {new Date().getFullYear()} · Todos los derechos reservados

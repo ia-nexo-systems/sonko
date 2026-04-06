@@ -64,6 +64,15 @@ export default function ContactoSection() {
 
       if (!res.ok) throw new Error("Error al enviar");
       setEnviado(true);
+
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'lead_form_submit',
+          lead_tipo_consulta: form.tipo_consulta,
+          lead_canal: form.contacto_preferido,
+          lead_franja: form.franja_horaria,
+        });
+      }
     } catch {
       setError("No se pudo enviar. Prueba por WhatsApp directamente.");
     } finally {
