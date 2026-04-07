@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trackWhatsAppClick, trackPhoneClick } from '../../tracking';
 
 const WEBHOOK_URL = "https://n8n.ianexosystems.com/webhook/sonko-lead";
 
@@ -145,6 +146,7 @@ export default function ContactoSection() {
             </p>
             <a
               href="tel:+34632372152"
+              onClick={() => trackPhoneClick('contacto')}
               className="inline-flex items-center gap-2 font-inter text-sm font-semibold mb-6 transition-colors duration-200"
               style={{ color: '#241F1B' }}
               onMouseEnter={e => e.currentTarget.style.color = '#A65A4D'}
@@ -158,6 +160,7 @@ export default function ContactoSection() {
               href="https://wa.me/34632372152"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick('contacto')}
               className="flex items-center gap-4 p-4 mb-4 transition-all duration-200"
               style={{ background: '#25D366', borderRadius: '6px' }}
               onMouseEnter={e => e.currentTarget.style.background = '#1ebe5d'}

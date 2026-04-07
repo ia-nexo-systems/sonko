@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 // Poster: frame cálido del vídeo — healer manos con conchas, luz de vela
 const POSTER = "https://media.base44.com/images/public/69b8ff201a186ac9effab2b3/36713451e_Healer_casting_cowrie_shells_5bcbe5a6bf.jpg";
 
@@ -79,6 +81,7 @@ export default function HeroSection() {
             href="https://wa.me/34632372152"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('hero')}
             className="w-full sm:w-auto px-8 py-4 text-white font-inter font-semibold text-sm tracking-wide transition-all duration-300"
             style={{ background: '#25D366', borderRadius: '6px' }}
             onMouseEnter={e => e.currentTarget.style.background = '#1ebe5d'}

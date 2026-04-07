@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 const servicios = [
   {
     nombre: "Armonía en relaciones sentimentales",
@@ -62,6 +64,7 @@ export default function ServiciosSection() {
                   href="https://wa.me/34632372152"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackWhatsAppClick('servicios')}
                   className="font-inter text-sm font-medium transition-colors duration-200"
                   style={{ color: '#25D366' }}
                 >
@@ -93,6 +96,7 @@ export default function ServiciosSection() {
             href="https://wa.me/34632372152"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('servicios_cta')}
             className="inline-block px-7 py-3.5 text-white font-inter font-semibold text-sm transition-all duration-300"
             style={{ background: '#25D366', borderRadius: '4px' }}
             onMouseEnter={e => e.currentTarget.style.background = '#1ebe5d'}

@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 export default function UbicacionSection() {
   return (
     <section style={{ background: '#F3EEE6' }} className="py-16 md:py-20">
@@ -20,6 +22,7 @@ export default function UbicacionSection() {
               href="https://wa.me/34632372152"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppClick('ubicacion')}
               className="inline-block px-7 py-3.5 text-white font-inter font-semibold text-sm transition-all duration-300"
               style={{ background: '#25D366', borderRadius: '4px' }}
               onMouseEnter={e => e.currentTarget.style.background = '#1ebe5d'}

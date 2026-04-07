@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { initTimeOnPage } from './tracking'
 import NavBar from './components/sonko/NavBar'
 import HeroSection from './components/sonko/HeroSection'
 import ProblemasSection from './components/sonko/ProblemasSection'
@@ -25,6 +26,8 @@ function useRoute() {
 
 export default function App() {
   const path = useRoute()
+
+  useEffect(() => { initTimeOnPage(60) }, [])
 
   if (path === '/privacidad') {
     return (

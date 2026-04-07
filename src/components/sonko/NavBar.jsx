@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { trackWhatsAppClick, trackPhoneClick } from '../../tracking';
 
 const navLinks = [
   { label: "Situaciones", href: "#situaciones" },
@@ -56,6 +57,7 @@ export default function NavBar() {
         <div className="flex items-center gap-3">
           <a
             href="tel:+34632372152"
+            onClick={() => trackPhoneClick('navbar')}
             className="hidden md:block font-inter text-xs font-medium transition-colors duration-200"
             style={{ color: 'rgba(234,227,217,0.65)' }}
             onMouseEnter={e => e.target.style.color = '#EAE3D9'}
@@ -67,6 +69,7 @@ export default function NavBar() {
             href="https://wa.me/34632372152"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppClick('navbar')}
             className="font-inter text-xs font-semibold text-white transition-all duration-300 px-5 py-2.5"
             style={{ background: '#25D366', borderRadius: '4px' }}
             onMouseEnter={e => e.currentTarget.style.background = '#1ebe5d'}
@@ -108,6 +111,7 @@ export default function NavBar() {
           ))}
           <a
             href="tel:+34632372152"
+            onClick={() => trackPhoneClick('navbar_mobile')}
             className="font-inter text-sm font-medium"
             style={{ color: 'rgba(234,227,217,0.65)' }}
           >
