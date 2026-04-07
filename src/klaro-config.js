@@ -44,10 +44,10 @@ const klaroConfig = {
         [/^_gid/, '/', 'profesorsonko.com'],
       ],
       onAccept: `
-        window['ga-disable-GA_MEASUREMENT_ID'] = false;
+        window['ga-disable-G-2BJ3MBVCK4'] = false;
       `,
       onDecline: `
-        window['ga-disable-GA_MEASUREMENT_ID'] = true;
+        window['ga-disable-G-2BJ3MBVCK4'] = true;
       `,
     },
     {
