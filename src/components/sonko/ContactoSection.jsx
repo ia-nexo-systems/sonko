@@ -18,8 +18,43 @@ function validarTelefono(tel) {
   return /^\+?\d{9,15}$/.test(limpio);
 }
 
+const DAY_NAMES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const MONTH_NAMES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+
+function getNextDays(count = 14) {
+  const days = [];
+  const today = new Date();
+  for (let i = 1; i <= count + 2; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    if (d.getDay() !== 0) days.push(d);
+    if (days.length >= count) break;
+  }
+  return days;
+}
+
+function toDateString(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+const TIME_SLOTS = [
+  '09:00', '10:00', '11:00', '12:00',
+  '13:00', '14:00', '15:00', '16:00', '17:00',
+  '18:00', '19:00', '20:00',
+];
+
+function deriveFranja(hora) {
+  const h = parseInt(hora);
+  if (h < 13) return 'manana';
+  if (h < 18) return 'tarde';
+  return 'noche';
+}
+
 export default function ContactoSection() {
-  const [form, setForm] = useState({ nombre: "", whatsapp: "", tipo_consulta: "", contacto_preferido: "", franja_horaria: "", mensaje: "" });
+  const [form, setForm] = useState({ nombre: "", whatsapp: "", tipo_consulta: "", contacto_preferido: "", cita_fecha: "", cita_hora: "", mensaje: "" });
   const [enviado, setEnviado] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
@@ -37,8 +72,19 @@ export default function ContactoSection() {
       return;
     }
 
+    if (form.contacto_preferido && form.contacto_preferido !== 'yo_contacto') {
+      if (!form.cita_fecha || !form.cita_hora) {
+        setError("Selecciona fecha y hora para la cita");
+        return;
+      }
+    }
+
     setEnviando(true);
     setError("");
+
+    const appointmentAt = form.cita_fecha && form.cita_hora
+      ? `${form.cita_fecha}T${form.cita_hora}:00`
+      : null;
 
     try {
       const res = await fetch(WEBHOOK_URL, {
@@ -50,7 +96,8 @@ export default function ContactoSection() {
           message: form.mensaje.trim(),
           tipo_consulta: form.tipo_consulta,
           contact_channel_preferred: form.contacto_preferido,
-          franja_horaria: form.franja_horaria,
+          franja_horaria: form.cita_hora ? deriveFranja(form.cita_hora) : null,
+          appointment_at: appointmentAt,
           source_system: "landing_profesorsonko",
           source_endpoint: "landing_form",
           form_id: "form_main",
@@ -70,7 +117,7 @@ export default function ContactoSection() {
           event: 'lead_form_submit',
           lead_tipo_consulta: form.tipo_consulta,
           lead_canal: form.contacto_preferido,
-          lead_franja: form.franja_horaria,
+          lead_cita: appointmentAt,
         });
       }
     } catch {
@@ -146,7 +193,7 @@ export default function ContactoSection() {
                   <div className="text-3xl mb-3" style={{ color: '#25D366' }}>✓</div>
                   <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Consulta recibida</h3>
                   <p className="font-inter text-sm mb-3" style={{ color: 'rgba(36,31,27,0.6)' }}>
-                    Profesor SONKO te contactará {form.contacto_preferido === 'llamada' ? 'por teléfono' : form.contacto_preferido === 'whatsapp' ? 'por WhatsApp' : ''} {form.franja_horaria === 'manana' ? 'por la mañana (9h–13h)' : form.franja_horaria === 'tarde' ? 'por la tarde (13h–18h)' : form.franja_horaria === 'noche' ? 'por la noche (18h–21h)' : 'en breve'}.
+                    Profesor SONKO te contactará {form.contacto_preferido === 'llamada' ? 'por teléfono' : form.contacto_preferido === 'whatsapp' ? 'por WhatsApp' : ''}{form.cita_fecha ? ` el ${new Date(form.cita_fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}` : ''}{form.cita_hora ? ` a las ${form.cita_hora}h` : ' en breve'}.
                   </p>
                   <p className="font-inter text-xs" style={{ color: 'rgba(36,31,27,0.45)' }}>
                     Toda la información es confidencial.
@@ -249,29 +296,70 @@ export default function ContactoSection() {
                     </select>
                   </div>
                   {form.contacto_preferido && form.contacto_preferido !== 'yo_contacto' && (
-                    <div>
-                      <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
-                        Franja horaria preferida *
-                      </label>
-                      <select
-                        name="franja_horaria"
-                        required
-                        value={form.franja_horaria}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 font-inter text-sm focus:outline-none transition-colors"
-                        style={{
-                          background: '#F3EEE6',
-                          border: '1px solid rgba(140,123,106,0.3)',
-                          borderRadius: '4px',
-                          color: form.franja_horaria ? '#241F1B' : '#8C7B6A',
-                        }}
-                      >
-                        <option value="" disabled>Selecciona...</option>
-                        <option value="manana">Mañana (9h – 13h)</option>
-                        <option value="tarde">Tarde (13h – 18h)</option>
-                        <option value="noche">Noche (18h – 21h)</option>
-                      </select>
-                    </div>
+                    <>
+                      <div>
+                        <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
+                          Fecha preferida *
+                        </label>
+                        <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'thin' }}>
+                          {getNextDays(10).map((date) => {
+                            const ds = toDateString(date);
+                            const selected = form.cita_fecha === ds;
+                            return (
+                              <button
+                                key={ds}
+                                type="button"
+                                onClick={() => setForm({ ...form, cita_fecha: ds })}
+                                className="flex-shrink-0 flex flex-col items-center px-3 py-2 font-inter transition-all duration-200"
+                                style={{
+                                  background: selected ? '#A65A4D' : '#F3EEE6',
+                                  border: selected ? '1px solid #A65A4D' : '1px solid rgba(140,123,106,0.3)',
+                                  borderRadius: '6px',
+                                  color: selected ? '#fff' : '#241F1B',
+                                  minWidth: '60px',
+                                }}
+                              >
+                                <span className="text-[10px] uppercase" style={{ opacity: selected ? 0.85 : 0.5 }}>
+                                  {DAY_NAMES[date.getDay()]}
+                                </span>
+                                <span className="text-lg font-semibold leading-tight">{date.getDate()}</span>
+                                <span className="text-[10px]" style={{ opacity: selected ? 0.85 : 0.5 }}>
+                                  {MONTH_NAMES[date.getMonth()]}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                      {form.cita_fecha && (
+                        <div>
+                          <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
+                            Hora preferida *
+                          </label>
+                          <div className="grid grid-cols-4 gap-2">
+                            {TIME_SLOTS.map((slot) => {
+                              const selected = form.cita_hora === slot;
+                              return (
+                                <button
+                                  key={slot}
+                                  type="button"
+                                  onClick={() => setForm({ ...form, cita_hora: slot })}
+                                  className="py-2 font-inter text-sm font-medium transition-all duration-200"
+                                  style={{
+                                    background: selected ? '#A65A4D' : '#F3EEE6',
+                                    border: selected ? '1px solid #A65A4D' : '1px solid rgba(140,123,106,0.3)',
+                                    borderRadius: '4px',
+                                    color: selected ? '#fff' : '#241F1B',
+                                  }}
+                                >
+                                  {slot}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </>
                   )}
                   <div>
                     <label className="font-inter text-xs uppercase tracking-wide block mb-2" style={{ color: '#8C7B6A' }}>
