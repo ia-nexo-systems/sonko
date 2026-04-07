@@ -48,6 +48,7 @@ export default function FAQSection() {
               <button
                 className="w-full flex items-center justify-between py-5 text-left gap-4"
                 onClick={() => setOpen(open === i ? null : i)}
+                aria-expanded={open === i}
               >
                 <span className="font-inter font-medium text-sm" style={{ color: '#241F1B' }}>{faq.q}</span>
                 <span

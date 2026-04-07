@@ -30,7 +30,9 @@ export default function App() {
     return (
       <>
         <NavBar />
-        <PoliticaPrivacidadSection />
+        <main>
+          <PoliticaPrivacidadSection />
+        </main>
         <FooterSection />
       </>
     )
@@ -39,16 +41,18 @@ export default function App() {
   return (
     <>
       <NavBar />
-      <HeroSection />
-      <ProblemasSection />
-      <SonkoSection />
-      <ServiciosSection />
-      <UbicacionSection />
-      <ComoFuncionaSection />
-      <TestimoniosSection />
-      <FAQSection />
-      <ContactoSection />
-      <AvisoLegalSection />
+      <main>
+        <HeroSection />
+        <ProblemasSection />
+        <SonkoSection />
+        <ServiciosSection />
+        <UbicacionSection />
+        <ComoFuncionaSection />
+        <TestimoniosSection />
+        <FAQSection />
+        <ContactoSection />
+        <AvisoLegalSection />
+      </main>
       <FooterSection />
     </>
   )

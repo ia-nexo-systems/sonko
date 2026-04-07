@@ -20,6 +20,7 @@ export default function NavBar() {
 
   return (
     <nav
+      aria-label="Navegación principal"
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
         background: scrolled ? 'rgba(30,26,23,0.97)' : 'transparent',
@@ -78,7 +79,8 @@ export default function NavBar() {
           <button
             className="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menú"
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuOpen}
           >
             <span className="block w-5 h-px transition-all duration-200" style={{ background: '#EAE3D9', transform: menuOpen ? 'translateY(4px) rotate(45deg)' : 'none' }} />
             <span className="block w-5 h-px transition-all duration-200" style={{ background: '#EAE3D9', opacity: menuOpen ? 0 : 1 }} />

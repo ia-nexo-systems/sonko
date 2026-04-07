@@ -45,9 +45,15 @@ const klaroConfig = {
       ],
       onAccept: `
         window['ga-disable-G-2BJ3MBVCK4'] = false;
+        if (typeof gtag === 'function') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
       `,
       onDecline: `
         window['ga-disable-G-2BJ3MBVCK4'] = true;
+        if (typeof gtag === 'function') {
+          gtag('consent', 'update', { analytics_storage: 'denied' });
+        }
       `,
     },
     {
@@ -56,7 +62,20 @@ const klaroConfig = {
       purposes: ['advertising'],
       cookies: [
         [/^_gcl/, '/', 'profesorsonko.com'],
+        [/^_gac/, '/', 'profesorsonko.com'],
       ],
+      onAccept: `
+        window['google_ads_paused'] = false;
+        if (typeof gtag === 'function') {
+          gtag('consent', 'update', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' });
+        }
+      `,
+      onDecline: `
+        window['google_ads_paused'] = true;
+        if (typeof gtag === 'function') {
+          gtag('consent', 'update', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+        }
+      `,
     },
   ],
 };

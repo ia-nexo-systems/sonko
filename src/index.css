@@ -1,7 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Canela:wght@300;400&family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Fallback si Canela no carga: usar una serif moderna de Google */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
+/* Fonts loaded via <link> in index.html for better performance */
 
 @tailwind base;
 @tailwind components;
