@@ -121,6 +121,15 @@ export default function ContactoSection() {
           lead_cita: appointmentAt,
         });
       }
+
+      // Google Ads conversion — Registro
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-18064088527/fpoXCMu4oJccEM-70KVD',
+          'value': 1.0,
+          'currency': 'EUR'
+        });
+      }
     } catch {
       setError("No se pudo enviar. Prueba por WhatsApp directamente.");
     } finally {
