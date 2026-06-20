@@ -1,18 +1,7 @@
 import { useState } from "react";
 import { trackWhatsAppClick, trackPhoneClick } from '../../tracking';
 
-const WEBHOOK_URL = "https://n8n.ianexosystems.com/webhook/sonko-lead";
-
-function getUtmParams() {
-  const params = new URLSearchParams(window.location.search);
-  const utms = {};
-  const keys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-  keys.forEach((key) => {
-    const val = params.get(key);
-    if (val) utms[key] = val;
-  });
-  return utms;
-}
+const WHATSAPP_NUMBER = "34632372152";
 
 function validarTelefono(tel) {
   const limpio = tel.replace(/[\s\-().]/g, "");
@@ -47,17 +36,9 @@ const TIME_SLOTS = [
   '18:00', '19:00', '20:00',
 ];
 
-function deriveFranja(hora) {
-  const h = parseInt(hora);
-  if (h < 13) return 'manana';
-  if (h < 18) return 'tarde';
-  return 'noche';
-}
-
 export default function ContactoSection() {
   const [form, setForm] = useState({ nombre: "", whatsapp: "", tipo_consulta: "", contacto_preferido: "", cita_fecha: "", cita_hora: "", mensaje: "" });
   const [enviado, setEnviado] = useState(false);
-  const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -65,7 +46,7 @@ export default function ContactoSection() {
     if (error) setError("");
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!validarTelefono(form.whatsapp)) {
@@ -80,61 +61,58 @@ export default function ContactoSection() {
       }
     }
 
-    setEnviando(true);
     setError("");
 
-    const appointmentAt = form.cita_fecha && form.cita_hora
-      ? `${form.cita_fecha}T${form.cita_hora}:00`
+    const tipoLabels = {
+      amor: "Problemas de amor / pareja",
+      negocio: "Negocios / trabajo",
+      bloqueo: "Bloqueos personales",
+      familia: "Problemas familiares",
+      proteccion: "Protección espiritual",
+      otro: "Otra consulta",
+    };
+    const canalLabels = {
+      whatsapp: "WhatsApp",
+      llamada: "Llamada telefónica",
+      yo_contacto: "Prefiero contactar yo",
+    };
+
+    const citaTexto = form.cita_fecha
+      ? `${new Date(form.cita_fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}${form.cita_hora ? ` a las ${form.cita_hora}h` : ''}`
       : null;
 
-    try {
-      const res = await fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          full_name: form.nombre.trim(),
-          phone_raw: form.whatsapp.trim(),
-          message: form.mensaje.trim(),
-          tipo_consulta: form.tipo_consulta,
-          contact_channel_preferred: form.contacto_preferido,
-          franja_horaria: form.cita_hora ? deriveFranja(form.cita_hora) : null,
-          appointment_at: appointmentAt,
-          source_system: "landing_profesorsonko",
-          source_endpoint: "landing_form",
-          form_id: "form_main",
-          landing_url: window.location.href,
-          referrer_url: document.referrer || "",
-          lead_status: "nuevo",
-          created_at: new Date().toISOString(),
-          ...getUtmParams(),
-        }),
+    const lineas = [
+      "Hola Profesor SONKO, quiero solicitar una consulta.",
+      "",
+      `Nombre: ${form.nombre.trim()}`,
+      `Teléfono: ${form.whatsapp.trim()}`,
+      form.tipo_consulta ? `Tipo de consulta: ${tipoLabels[form.tipo_consulta] || form.tipo_consulta}` : null,
+      form.contacto_preferido ? `Prefiero: ${canalLabels[form.contacto_preferido] || form.contacto_preferido}` : null,
+      citaTexto ? `Cita preferida: ${citaTexto}` : null,
+      form.mensaje.trim() ? `Mensaje: ${form.mensaje.trim()}` : null,
+    ].filter(Boolean);
+
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lineas.join("\n"))}`;
+
+    // Tracking: la conversión se cuenta al derivar el lead a WhatsApp
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'lead_form_submit',
+        lead_tipo_consulta: form.tipo_consulta,
+        lead_canal: 'whatsapp',
+        lead_cita: form.cita_fecha && form.cita_hora ? `${form.cita_fecha}T${form.cita_hora}:00` : null,
       });
-
-      if (!res.ok) throw new Error("Error al enviar");
-      setEnviado(true);
-
-      if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push({
-          event: 'lead_form_submit',
-          lead_tipo_consulta: form.tipo_consulta,
-          lead_canal: form.contacto_preferido,
-          lead_cita: appointmentAt,
-        });
-      }
-
-      // Google Ads conversion — Registro
-      if (typeof gtag === 'function') {
-        gtag('event', 'conversion', {
-          'send_to': 'AW-18064088527/fpoXCMu4oJccEM-70KVD',
-          'value': 1.0,
-          'currency': 'EUR'
-        });
-      }
-    } catch {
-      setError("No se pudo enviar. Prueba por WhatsApp directamente.");
-    } finally {
-      setEnviando(false);
     }
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18064088527/fpoXCMu4oJccEM-70KVD',
+        'value': 1.0,
+        'currency': 'EUR'
+      });
+    }
+
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+    setEnviado(true);
   };
 
   return (
@@ -203,9 +181,9 @@ export default function ContactoSection() {
               {enviado ? (
                 <div className="text-center py-8">
                   <div className="text-3xl mb-3" style={{ color: '#25D366' }}>✓</div>
-                  <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Consulta recibida</h3>
+                  <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Te abrimos WhatsApp</h3>
                   <p className="font-inter text-sm mb-3" style={{ color: 'rgba(36,31,27,0.6)' }}>
-                    Profesor SONKO te contactará {form.contacto_preferido === 'llamada' ? 'por teléfono' : form.contacto_preferido === 'whatsapp' ? 'por WhatsApp' : ''}{form.cita_fecha ? ` el ${new Date(form.cita_fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}` : ''}{form.cita_hora ? ` a las ${form.cita_hora}h` : ' en breve'}.
+                    Hemos preparado tu consulta en WhatsApp para que la envíes a Profesor SONKO. Si no se abrió automáticamente, escríbenos al +34 632 37 21 52.
                   </p>
                   <p className="font-inter text-xs" style={{ color: 'rgba(36,31,27,0.45)' }}>
                     Toda la información es confidencial.
@@ -394,11 +372,10 @@ export default function ContactoSection() {
                   </div>
                   <button
                     type="submit"
-                    disabled={enviando}
-                    className="w-full py-4 text-white font-inter font-semibold text-sm hover:opacity-90 transition-all duration-300 disabled:opacity-60"
+                    className="w-full py-4 text-white font-inter font-semibold text-sm hover:opacity-90 transition-all duration-300"
                     style={{ background: '#A65A4D', borderRadius: '4px' }}
                   >
-                    {enviando ? "Enviando..." : "Enviar consulta"}
+                    Enviar consulta por WhatsApp
                   </button>
                   <p className="font-inter text-xs text-center" style={{ color: 'rgba(36,31,27,0.45)' }}>
                     Confidencial · Sin compromiso · Respuesta directa
