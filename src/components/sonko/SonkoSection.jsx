@@ -57,7 +57,7 @@ export default function SonkoSection() {
             <p className="font-inter text-sm mb-6" style={{ color: 'rgba(36,31,27,0.5)' }}>Cada situación es diferente. Puedes recibir orientación espiritual personalizada.</p>
 
             <a
-              href="https://wa.me/34632372152"
+              href="https://wa.me/34632272152"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-7 py-3.5 text-white font-inter font-semibold text-sm transition-all duration-300 mb-10"

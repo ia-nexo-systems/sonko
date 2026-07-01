@@ -59,7 +59,7 @@ export default function ComoFuncionaSection() {
             Cada caso requiere una orientación diferente.
           </p>
           <a
-            href="https://wa.me/34632372152"
+            href="https://wa.me/34632272152"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 text-white font-inter font-semibold text-sm transition-all duration-300"

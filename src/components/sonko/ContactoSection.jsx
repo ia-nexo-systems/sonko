@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { trackWhatsAppClick, trackPhoneClick } from '../../tracking';
 
-const WHATSAPP_NUMBER = "34632372152";
+const WHATSAPP_NUMBER = "34632272152";
 
 function validarTelefono(tel) {
   const limpio = tel.replace(/[\s\-().]/g, "");
@@ -50,7 +50,7 @@ export default function ContactoSection() {
     e.preventDefault();
 
     if (!validarTelefono(form.whatsapp)) {
-      setError("Introduce un numero de telefono valido (ej: +34 632 372 152)");
+      setError("Introduce un numero de telefono valido (ej: +34 632 272 152)");
       return;
     }
 
@@ -132,19 +132,19 @@ export default function ContactoSection() {
               Puedes realizar tu consulta directamente por WhatsApp o rellenando el formulario. La conversación inicial permite explicar tu situación y recibir orientación personalizada. Confidencial y sin compromiso.
             </p>
             <a
-              href="tel:+34632372152"
+              href="tel:+34632272152"
               onClick={() => trackPhoneClick('contacto')}
               className="inline-flex items-center gap-2 font-inter text-sm font-semibold mb-6 transition-colors duration-200"
               style={{ color: '#241F1B' }}
               onMouseEnter={e => e.currentTarget.style.color = '#A65A4D'}
               onMouseLeave={e => e.currentTarget.style.color = '#241F1B'}
             >
-              <span style={{ color: '#A65A4D' }}>📞</span> +34 632 37 21 52
+              <span style={{ color: '#A65A4D' }}>📞</span> +34 632 27 21 52
             </a>
 
             {/* WhatsApp destacado */}
             <a
-              href="https://wa.me/34632372152"
+              href="https://wa.me/34632272152"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackWhatsAppClick('contacto')}
@@ -183,7 +183,7 @@ export default function ContactoSection() {
                   <div className="text-3xl mb-3" style={{ color: '#25D366' }}>✓</div>
                   <h3 className="text-xl font-normal mb-2" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'normal', color: '#241F1B' }}>Te abrimos WhatsApp</h3>
                   <p className="font-inter text-sm mb-3" style={{ color: 'rgba(36,31,27,0.6)' }}>
-                    Hemos preparado tu consulta en WhatsApp para que la envíes a Profesor SONKO. Si no se abrió automáticamente, escríbenos al +34 632 37 21 52.
+                    Hemos preparado tu consulta en WhatsApp para que la envíes a Profesor SONKO. Si no se abrió automáticamente, escríbenos al +34 632 27 21 52.
                   </p>
                   <p className="font-inter text-xs" style={{ color: 'rgba(36,31,27,0.45)' }}>
                     Toda la información es confidencial.

@@ -56,17 +56,17 @@ export default function NavBar() {
 
         <div className="flex items-center gap-3">
           <a
-            href="tel:+34632372152"
+            href="tel:+34632272152"
             onClick={() => trackPhoneClick('navbar')}
             className="hidden md:block font-inter text-xs font-medium transition-colors duration-200"
             style={{ color: 'rgba(234,227,217,0.65)' }}
             onMouseEnter={e => e.target.style.color = '#EAE3D9'}
             onMouseLeave={e => e.target.style.color = 'rgba(234,227,217,0.65)'}
           >
-            +34 632 37 21 52
+            +34 632 27 21 52
           </a>
           <a
-            href="https://wa.me/34632372152"
+            href="https://wa.me/34632272152"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackWhatsAppClick('navbar')}
@@ -110,12 +110,12 @@ export default function NavBar() {
             </a>
           ))}
           <a
-            href="tel:+34632372152"
+            href="tel:+34632272152"
             onClick={() => trackPhoneClick('navbar_mobile')}
             className="font-inter text-sm font-medium"
             style={{ color: 'rgba(234,227,217,0.65)' }}
           >
-            +34 632 37 21 52
+            +34 632 27 21 52
           </a>
         </div>
       )}

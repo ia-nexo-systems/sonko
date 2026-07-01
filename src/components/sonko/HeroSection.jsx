@@ -78,7 +78,7 @@ export default function HeroSection() {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
           <a
-            href="https://wa.me/34632372152"
+            href="https://wa.me/34632272152"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackWhatsAppClick('hero')}

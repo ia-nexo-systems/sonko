@@ -61,7 +61,7 @@ export default function ServiciosSection() {
               <p className="font-inter text-xs leading-relaxed mb-5" style={{ color: '#8C7B6A' }}>{s.nota}</p>
               <div className="mt-auto pt-4" style={{ borderTop: '1px solid rgba(140,123,106,0.2)' }}>
                 <a
-                  href="https://wa.me/34632372152"
+                  href="https://wa.me/34632272152"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackWhatsAppClick('servicios')}
@@ -93,7 +93,7 @@ export default function ServiciosSection() {
             Si sientes que algo en tu vida no está avanzando como debería, puedes explicar tu situación y recibir orientación espiritual personalizada. Cada caso es diferente.
           </p>
           <a
-            href="https://wa.me/34632372152"
+            href="https://wa.me/34632272152"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackWhatsAppClick('servicios_cta')}

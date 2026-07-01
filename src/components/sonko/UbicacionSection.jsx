@@ -19,7 +19,7 @@ export default function UbicacionSection() {
               Atención presencial y online. Atención profesional, directa y confidencial.
             </p>
             <a
-              href="https://wa.me/34632372152"
+              href="https://wa.me/34632272152"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackWhatsAppClick('ubicacion')}
