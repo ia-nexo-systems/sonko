@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 const testimonios = [
   {
     categoria: "Problemas de pareja",
@@ -72,6 +74,7 @@ export default function TestimoniosSection() {
         <div className="mt-10 text-center">
           <a
             href="https://wa.me/34632272152"
+            onClick={() => trackWhatsAppClick('testimonios')}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 text-white font-inter font-semibold text-sm transition-all duration-300"

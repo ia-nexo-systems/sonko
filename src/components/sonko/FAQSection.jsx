@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { trackWhatsAppClick } from '../../tracking';
 
 const faqs = [
   {
@@ -70,6 +71,7 @@ export default function FAQSection() {
         <div className="mt-10">
           <a
             href="https://wa.me/34632272152"
+            onClick={() => trackWhatsAppClick('faq')}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 text-white font-inter font-semibold text-sm transition-all duration-300"

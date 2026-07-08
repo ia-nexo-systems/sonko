@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 const bullets = [
   "+20 años de experiencia en orientación espiritual",
   "Tradición ancestral familiar transmitida de generación en generación",
@@ -58,6 +60,7 @@ export default function SonkoSection() {
 
             <a
               href="https://wa.me/34632272152"
+              onClick={() => trackWhatsAppClick('sonko')}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-7 py-3.5 text-white font-inter font-semibold text-sm transition-all duration-300 mb-10"

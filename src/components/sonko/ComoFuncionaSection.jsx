@@ -1,3 +1,5 @@
+import { trackWhatsAppClick } from '../../tracking';
+
 const pasos = [
   {
     num: "01",
@@ -60,6 +62,7 @@ export default function ComoFuncionaSection() {
           </p>
           <a
             href="https://wa.me/34632272152"
+            onClick={() => trackWhatsAppClick('comofunciona')}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 text-white font-inter font-semibold text-sm transition-all duration-300"
