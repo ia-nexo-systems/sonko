@@ -2,6 +2,7 @@ import { useState } from "react";
 import { trackWhatsAppClick, trackPhoneClick } from '../../tracking';
 
 const WHATSAPP_NUMBER = "34632272152";
+const LEAD_WEBHOOK_URL = "https://n8n.ianexosystems.com/webhook/sonko-lead";
 
 function validarTelefono(tel) {
   const limpio = tel.replace(/[\s\-().]/g, "");
@@ -93,6 +94,31 @@ export default function ContactoSection() {
     ].filter(Boolean);
 
     const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lineas.join("\n"))}`;
+
+    // El lead se guarda en leads_sonko via n8n. keepalive: la peticion sobrevive
+    // a la navegacion a WhatsApp; no se espera respuesta para no retrasar el
+    // window.open (un open diferido lo bloquea el navegador como popup).
+    const mensajeConCita = [form.mensaje.trim(), citaTexto ? `Cita preferida: ${citaTexto}` : null]
+      .filter(Boolean).join(' | ');
+    fetch(LEAD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
+      body: JSON.stringify({
+        full_name: form.nombre.trim(),
+        phone_raw: form.whatsapp.trim(),
+        message: mensajeConCita,
+        tipo_consulta: form.tipo_consulta || null,
+        contact_channel_preferred: form.contacto_preferido || null,
+        landing_url: window.location.href,
+        referrer_url: document.referrer || '',
+        utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+        utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
+        utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign'),
+        utm_content: new URLSearchParams(window.location.search).get('utm_content'),
+        utm_term: new URLSearchParams(window.location.search).get('utm_term'),
+      }),
+    }).catch(() => { /* el lead va tambien por WhatsApp: un fallo aqui no corta al usuario */ });
 
     // Tracking: la conversión se cuenta al derivar el lead a WhatsApp
     if (typeof window !== 'undefined' && window.dataLayer) {
